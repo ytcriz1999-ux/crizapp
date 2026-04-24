@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+/* ================= APP WRAPPER ================= */
+.main-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 60px);
+}
+
+/* ================= PLAYER ================= */
+.player-box {
+    padding: 12px;
+    background: #000;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+video {
+    width: 100%;
+    max-height: 450px;
+    border-radius: 12px;
+}
+
+/* ================= LIST ================= */
+.video-list {
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+/* ================= CARD ================= */
+.video-item {
+    background: #1e1e1e;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    transition: 0.2s;
+    color: white;
+}
+
+/* hover effect */
+.video-item:hover {
+    transform: scale(1.01);
+    background: #2a2a2a;
+}
+
+/* ACTIVE VIDEO */
+.video-item.active {
+    border-left: 4px solid #0d6efd;
+}
+
+/* ================= ACTIONS ================= */
+.video-actions {
+    margin-top: 8px;
+    display: flex;
+    gap: 5px;
+}
+
+.btn-small {
+    flex: 1;
+    font-size: 12px;
+    padding: 4px;
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 768px) {
+    video {
+        max-height: 220px;
+    }
+}
+</style>
+
+<div class="main-wrapper">
+
+    <!-- ================= TOP PLAYER ================= -->
+    <div class="player-box">
+
+        <h6 id="title" class="text-white">Select a video</h6>
+
+        <video id="player" controls></video>
+
+    </div>
+
+    <!-- ================= LIST ================= -->
+    <div class="video-list">
+
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6>Your Videos</h6>
+            <a href="/upload" class="btn btn-success btn-sm">+ Upload</a>
+        </div>
+
+        {% for video in videos %}
+        <div class="video-item" id="vid-{{ video.id }}">
+
+            <!-- PLAY -->
+            <div onclick="playVideo('{{ video.filename }}', '{{ video.id }}')"
+                 style="cursor:pointer;">
+                ▶ {{ video.filename }}
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="video-actions">
+
+                <a href="/play/{{ video.filename }}"
+                   class="btn btn-sm btn-success btn-small">
+                    Play
+                </a>
+
+                <button class="btn btn-sm btn-outline-danger btn-small"
+                        onclick="confirmDelete('{{ video.id }}')">
+                    Delete
+                </button>
+
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<!-- ================= SCRIPT ================= -->
+<script>
+
+let activeId = null;
+
+/* PLAY VIDEO */
+function playVideo(file, id) {
+
+    let player = document.getElementById("player");
+
+    player.src = "/uploads/" + file;
+    player.load();
+    player.play();
+
+    document.getElementById("title").innerText = file;
+
+    /* highlight active */
+    if (activeId) {
+        document.getElementById("vid-" + activeId).classList.remove("active");
+    }
+
+    document.getElementById("vid-" + id).classList.add("active");
+    activeId = id;
+}
+
+/* DELETE */
+function confirmDelete(id) {
+    if (confirm("Delete this video?")) {
+        window.location.href = "/delete/" + id;
+    }
+}
+
+</script>
+
+{% endblock %}
