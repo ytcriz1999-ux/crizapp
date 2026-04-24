@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Video Player</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-dark text-white">
+
+<nav class="navbar navbar-dark bg-black px-3">
+    <a href="/dashboard" class="btn btn-light btn-sm">⬅ Back</a>
+</nav>
+
+<div class="container mt-4 text-center">
+
+    <h2>Video Player</h2>
+
+<video width="600" controls>
+    <source src="/uploads/{{ filename }}">
+</video>
+
+<br><br>
+<a href="/dashboard">Back</a>
+
+</div>
+
+</body>
+</html>
